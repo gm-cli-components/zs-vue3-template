@@ -1,9 +1,11 @@
 #app {
 
   .main-container {
+    display: flex;
     min-height: 100%;
+    margin-top: 80px;
     transition: margin-left .28s;
-    margin-left: $base-sidebar-width;
+    // margin-left: $base-sidebar-width;
     position: relative;
   }
 
@@ -17,11 +19,11 @@
     width: $base-sidebar-width !important;
     background-color: $base-menu-background;
     height: 100%;
-    position: fixed;
+    // position: fixed;
     font-size: 0px;
-    top: 0;
-    bottom: 0;
-    left: 0;
+    // top: 0;
+    // bottom: 0;
+    // left: 0;
     z-index: 1001;
     overflow: hidden;
     -webkit-box-shadow: 2px 0 6px rgba(0,21,41,.35);
@@ -116,9 +118,9 @@
       width: 54px !important;
     }
 
-    .main-container {
-      margin-left: 54px;
-    }
+    // .main-container {
+    //   margin-left: 54px;
+    // }
 
     .sub-menu-title-noDropdown {
       padding: 0 !important;

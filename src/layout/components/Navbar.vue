@@ -1,32 +1,19 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <!-- <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!settingsStore.topNav" />
-    <top-nav id="topmenu-container" class="topmenu-container" v-if="settingsStore.topNav" />
-
-    <div class="right-menu">
-      <template v-if="appStore.device !== 'mobile'">
-        <header-search id="header-search" class="right-menu-item" />
-
-        <el-tooltip content="源码地址" effect="dark" placement="bottom">
-          <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
-        </el-tooltip>
-
-        <el-tooltip content="文档地址" effect="dark" placement="bottom">
-          <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
-        </el-tooltip>
-
-        <screenfull id="screenfull" class="right-menu-item hover-effect" />
-
-        <el-tooltip content="布局大小" effect="dark" placement="bottom">
-          <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip>
-      </template>
-      <div class="avatar-container">
-        <el-dropdown @command="handleCommand" class="right-menu-item hover-effect" trigger="click">
+    <top-nav id="topmenu-container" class="topmenu-container" v-if="settingsStore.topNav" /> -->
+    <div class="center-menu">
+      <img class="titleLogo" src="@/assets/logo/titleLogo.png">
+      基础管理平台 <span class="line"> | </span>
+      <span class="fs-26 m-l-10"> 基础管理平台 </span>
+    </div>
+    <div class="right-menu m-r-20">
+      <el-dropdown @command="handleCommand" class="avatar-container right-menu-item hover-effect" trigger="click">
           <div class="avatar-wrapper">
-            <img :src="userStore.avatar" class="user-avatar" />
-            <el-icon><caret-bottom /></el-icon>
+            <el-icon><UserFilled /></el-icon>
+          欢迎，{{ nickName || '用户' }}
+          <el-icon><CaretBottom /></el-icon>
           </div>
           <template #dropdown>
             <el-dropdown-menu>
@@ -42,7 +29,6 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-      </div>
     </div>
   </div>
 </template>
@@ -102,11 +88,44 @@ function setLayout() {
 
 <style lang='scss' scoped>
 .navbar {
-  height: 50px;
+  height: 80px;
   overflow: hidden;
-  position: relative;
-  background: #fff;
+  background: #1d63cc;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .avatar-wrapper {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    i {
+      margin: 0 5px;
+    }
+  }
+  .center-menu {
+    font-size: 30px;
+    font-family: Source Han Sans CN;
+    font-weight: 500;
+    color: #f6f5ff;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    .line {
+      font-weight: 200;
+      margin-left: 16px;
+    }
+    .titleLogo {
+      width: 34px;
+      margin: -10px 20px 0;
+      // height: 34px;
+    }
+    .fs-30 {
+      font-weight: normal;
+    }
+  }
 
   .hamburger-container {
     line-height: 46px;
@@ -136,55 +155,19 @@ function setLayout() {
   }
 
   .right-menu {
-    float: right;
     height: 100%;
     line-height: 50px;
     display: flex;
+    justify-content: right;
+    align-items: center;
 
     &:focus {
       outline: none;
     }
-
     .right-menu-item {
-      display: inline-block;
-      padding: 0 8px;
-      height: 100%;
-      font-size: 18px;
-      color: #5a5e66;
-      vertical-align: text-bottom;
-
-      &.hover-effect {
-        cursor: pointer;
-        transition: background 0.3s;
-
-        &:hover {
-          background: rgba(0, 0, 0, 0.025);
-        }
-      }
-    }
-
-    .avatar-container {
-      margin-right: 40px;
-
-      .avatar-wrapper {
-        margin-top: 5px;
-        position: relative;
-
-        .user-avatar {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
-        }
-
-        i {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
-        }
-      }
+      font-size: 16px;
+      color: #fff;
+      cursor: pointer;
     }
   }
 }

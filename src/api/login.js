@@ -1,3 +1,13 @@
+/*
+ * @Author: gaomeng
+ * @Date: 2023-02-10 09:33:14
+ * @LastEditors: gaomeng
+ * @LastEditTime: 2023-02-10 11:32:19
+ * @FilePath: \zs-vue3-template\src\api\login.js
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
+ */
 import request from '@/utils/request'
 
 // 登录方法
@@ -55,5 +65,14 @@ export function getCodeImg() {
     },
     method: 'get',
     timeout: 20000
+  })
+}
+
+// 获取手机验证码
+export function getCodePhone(params) {
+  return request({
+    url: '/send-sms',
+    method: 'get',
+    params
   })
 }

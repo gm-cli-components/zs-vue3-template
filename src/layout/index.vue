@@ -1,11 +1,16 @@
 <template>
   <div :class="classObj" class="app-wrapper" :style="{ '--current-color': theme }">
     <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside"/>
-    <sidebar v-if="!sidebar.hide" class="sidebar-container" />
-    <div :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" class="main-container">
-      <div :class="{ 'fixed-header': fixedHeader }">
+    <div :class="{ 'fixed-header': fixedHeader, fixed: true }">
         <navbar @setLayout="setLayout" />
-        <tags-view v-if="needTagsView" />
+      </div>
+    <div :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" class="main-container">
+      <div class="mainSide">
+        <sidebar v-if="!sidebar.hide" class="sidebar-container" />
+        <div @click="toggleSideBar" class="control">
+          <el-icon v-if="sidebar.opened"><ArrowLeft /></el-icon>
+          <el-icon v-else><ArrowRight /></el-icon>
+        </div>
       </div>
       <app-main />
       <settings ref="settingRef" />
@@ -56,6 +61,10 @@ function handleClickOutside() {
   useAppStore().closeSideBar({ withoutAnimation: false })
 }
 
+function toggleSideBar() {
+  useAppStore().toggleSideBar()
+}
+
 const settingRef = ref(null);
 function setLayout() {
   settingRef.value.openSetting();
@@ -65,13 +74,16 @@ function setLayout() {
 <style lang="scss" scoped>
   @import "@/assets/styles/mixin.scss";
   @import "@/assets/styles/variables.module.scss";
-
+.main-containe {
+  display: flex;
+}
 .app-wrapper {
   @include clearfix;
   position: relative;
-  height: 100%;
+  // height: 100%;
+  min-height: 100vh;
   width: 100%;
-
+  background: #f6f8f9;
   &.mobile.openSidebar {
     position: fixed;
     top: 0;
@@ -100,7 +112,12 @@ function setLayout() {
 .hideSidebar .fixed-header {
   width: calc(100% - 54px);
 }
-
+.fixed {
+  position: fixed;
+  top: 0;
+  z-index: 999;
+  width: 100vw;
+}
 .sidebarHide .fixed-header {
   width: 100%;
 }
@@ -108,4 +125,24 @@ function setLayout() {
 .mobile .fixed-header {
   width: 100%;
 }
+.mainSide {
+    position: relative;
+    .control {
+      position: absolute;
+      height: 55px;
+      width: 12px;
+      top: 40vh;
+      background: #fff;
+      z-index: 98;
+      right: -12px;
+      border-radius: 0 12px 12px 0;
+      // display: flex;
+      // justify-content: center;
+      // align-content: center;
+      line-height: 55px;
+      color: #ccc;
+      padding-right: 5px;
+      cursor: pointer;
+    }
+  }
 </style>

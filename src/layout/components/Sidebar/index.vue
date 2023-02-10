@@ -1,6 +1,16 @@
+<!--
+ * @Author: gaomeng
+ * @Date: 2023-02-10 09:33:14
+ * @LastEditors: gaomeng
+ * @LastEditTime: 2023-02-10 15:56:14
+ * @FilePath: \zs-vue3-template\src\layout\components\Sidebar\index.vue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
+-->
 <template>
   <div :class="{ 'has-logo': showLogo }" :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground }">
-    <logo v-if="showLogo" :collapse="isCollapse" />
+    <!-- <logo v-if="showLogo" :collapse="isCollapse" /> -->
     <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper">
       <el-menu
         :default-active="activeMenu"

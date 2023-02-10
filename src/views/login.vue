@@ -28,7 +28,7 @@
           auto-complete="off"
           placeholder="密码"
           show-password
-          @keyup.enter.native="handleLogin"
+          @keyup.enter="handleLogin"
         >
           <svg-icon
             slot="prefix"
@@ -43,7 +43,7 @@
           auto-complete="off"
           placeholder="验证码"
           style="width: 63%"
-          @keyup.enter.native="handleLogin"
+          @keyup.enter="handleLogin"
         >
           <svg-icon
             slot="prefix"
@@ -70,7 +70,7 @@
           size="medium"
           type="primary"
           style="width: 100%"
-          @click.native.prevent="handleLogin"
+          @click="handleLogin"
         >
           <span v-if="!loading">登 录</span>
           <span v-else>登 录 中...</span>
@@ -91,7 +91,7 @@
 
     <el-dialog
       title="验证码"
-      :visible.sync="codeVisible"
+      v-model:visible.sync="codeVisible"
       width="600px"
       destroy-on-close
       class="m-t-300"
@@ -146,32 +146,54 @@ const register = ref(false);
 const redirect = ref(undefined);
 
 function handleLogin() {
-  proxy.$refs.loginRef.validate(valid => {
-    if (valid) {
-      loading.value = true;
-      // 勾选了需要记住密码设置在 cookie 中设置记住用户名和密码
-      if (loginForm.value.rememberMe) {
-        Cookies.set("username", loginForm.value.username, { expires: 30 });
-        Cookies.set("password", encrypt(loginForm.value.password), { expires: 30 });
-        Cookies.set("rememberMe", loginForm.value.rememberMe, { expires: 30 });
-      } else {
-        // 否则移除
-        Cookies.remove("username");
-        Cookies.remove("password");
-        Cookies.remove("rememberMe");
-      }
-      // 调用action的登录方法
-      userStore.login(loginForm.value).then(() => {
-        router.push({ path: redirect.value || "/" });
-      }).catch(() => {
-        loading.value = false;
-        // 重新获取验证码
-        if (captchaEnabled.value) {
-          getCode();
+  
+  this.$refs.loginForm.validate((valid) => {
+        if (valid) {
+          this.loading = true
+          if (this.loginForm.rememberMe) {
+            Cookies.set('username', this.loginForm.username, { expires: 30 })
+            Cookies.set('password', encrypt(this.loginForm.password), {
+              expires: 30
+            })
+            Cookies.set('rememberMe', this.loginForm.rememberMe, {
+              expires: 30
+            })
+          } else {
+            Cookies.remove('username')
+            Cookies.remove('password')
+            Cookies.remove('rememberMe')
+          }
+
+          const obj = _.cloneDeep(this.loginForm)
+          const SM4 = require('gm-crypt').sm4
+          const sm4Config = {
+            key: '567502e0e087c22b',
+            mode: 'ecb',
+            cipherType: 'base64'
+          }
+          const sm4 = new SM4(sm4Config)
+          obj.password = sm4.encrypt(obj.password)
+          obj.captcha = this.loginForm.captcha
+          this.$store
+            .dispatch('Login', obj)
+            .then(() => {
+              // 跳到首页
+              // this.$router.push({ path: this.redirect || '/' }).catch(() => {})
+              // 跳到第一个页面
+              this.$router.push('/index').catch(() => {})
+              this.$$nextTick(() => {
+                this.$store.dispatch('getCityOptions')
+              })
+            })
+            .catch(() => {
+              this.loading = false
+              if (this.captchaOnOff) {
+                this.getCode()
+              }
+            })
         }
-      });
-    }
-  });
+      })
+    
 }
 
 function getCode() {
